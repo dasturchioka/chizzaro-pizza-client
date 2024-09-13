@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import NavbarLogo from './components/navbar-logo.vue'
 import { Pizza, User } from 'lucide-vue-next'
 import { PageTransition, TransitionPresets } from 'vue3-page-transition'
 
