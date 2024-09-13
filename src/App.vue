@@ -48,6 +48,6 @@ const sendDataToBot = async () => {
 }
 
 .link.router-link-active.router-link-exact-active .icon {
-	@apply scale-100 left-10;
+	@apply scale-100 left-4;
 }
 </style>
