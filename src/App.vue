@@ -25,15 +25,15 @@ const sendDataToBot = async () => {
 		>
 			<RouterLink
 				to="/menu"
-				class="link transition-all w-full justify-center  flex items-center p-4 font-semibold rounded-full"
-				><Pizza class="icon transition-all scale-80 w-6 h-6 mr-2" />
-				<p class="scale-90 transition-all">Menu</p>
+				class="link transition-all w-full justify-center flex relative items-center p-4 font-semibold rounded-full"
+				><Pizza class="icon transition-all scale-80 w-6 h-6 mr-2 absolute left-[50%]" />
+				<p class="transition-all scale-y-0 origin-bottom">Menu</p>
 			</RouterLink>
 			<RouterLink
 				to="/account"
-				class="link transition-all w-full justify-center  flex items-center p-4 font-semibold rounded-full"
-				><User class="icon transition-all scale-80 w-6 h-6 mr-2" />
-				<p class="scale-90 transition-all">Account</p>
+				class="link transition-all w-full justify-center flex relative items-center p-4 font-semibold rounded-full"
+				><User class="icon transition-all scale-80 w-6 h-6 mr-2 absolute right-[50%] left-[44%]" />
+				<p class="transition-all scale-y-0 origin-bottom">Account</p>
 			</RouterLink>
 		</div>
 	</div>
@@ -41,14 +41,14 @@ const sendDataToBot = async () => {
 
 <style scoped>
 .link.router-link-active.router-link-exact-active {
-	@apply bg-brand-dark text-white shadow-md
+	@apply bg-brand-dark text-white shadow-md;
 }
 
 .link.router-link-active.router-link-exact-active p {
-	@apply scale-100
+	@apply scale-y-100 flex;
 }
 
 .link.router-link-active.router-link-exact-active .icon {
-	@apply scale-100;
+	@apply scale-100 left-10;
 }
 </style>
