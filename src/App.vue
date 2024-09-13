@@ -40,14 +40,14 @@ const sendDataToBot = async () => {
 
 <style scoped>
 .link.router-link-active.router-link-exact-active {
-	@apply bg-brand-dark text-white shadow-md;
+	@apply bg-brand-dark  shadow-md;
 }
 
 .link.router-link-active.router-link-exact-active p {
-	@apply scale-y-100 flex;
+	@apply scale-y-100 flex text-white;
 }
 
 .link.router-link-active.router-link-exact-active .icon {
-	@apply scale-100 left-4;
+	@apply scale-100 left-4 text-white;
 }
 </style>
