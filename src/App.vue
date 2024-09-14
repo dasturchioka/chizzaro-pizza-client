@@ -14,7 +14,7 @@ import { PageTransition, TransitionPresets } from 'vue3-page-transition'
 			</PageTransition>
 		</router-view>
 		<div
-			class="tabs bg-brand-third flex items-center justify-between self-center mb-2 fixed bottom-0 z-50 shadow-lg rounded-full w-[96%]"
+			class="tabs bg-brand-third flex items-center justify-between self-center mb-2 fixed bottom-0 z-50 shadow-2xl rounded-full w-[96%] border-2 border-brand-dark"
 		>
 			<RouterLink
 				to="/menu"
