@@ -35,5 +35,5 @@ export const useCart = defineStore('cart-store', () => {
 		}
 	}
 
-	return { cart, pushItemToCart, increaseQuantity, decreaseQuantity }
+	return { cart, pushItemToCart, increaseQuantity, decreaseQuantity, id }
 })
