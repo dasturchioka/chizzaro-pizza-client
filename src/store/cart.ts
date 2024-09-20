@@ -8,7 +8,11 @@ export interface Item {
 	price: string
 	quantity: number
 	img: string
-	category: string
+	description?: string
+	category: {
+		name: string
+		[key: string]: any
+	}
 }
 
 export const useCart = defineStore('cart-store', () => {

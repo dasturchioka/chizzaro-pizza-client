@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import Button from '../ui/button/Button.vue'
 import { config } from '@/config'
+import { RouterLink } from 'vue-router'
 
 const props = defineProps<{ item: Item }>()
 
@@ -42,9 +43,12 @@ const itemsQuantity = computed(() => {
 			<Button
 				@click="cartStore.pushItemToCart(item)"
 				v-show="!isItemAvailableInCart"
-				class="text-white bg-brand-dark w-full font-bold rounded-lg py-4"
+				class="w-full font-bold rounded-lg py-4"
 				>Qo'shish</Button
 			>
+			<Button variant="ghost" class="w-full mt-2">
+				<RouterLink class="w-full" :to="`/item/${item.id}`">Ko'rish</RouterLink>
+			</Button>
 		</div>
 	</div>
 </template>
