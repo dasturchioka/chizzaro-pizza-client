@@ -28,17 +28,17 @@ import { Toaster } from 'vue-sonner'
 			<RouterLink
 				to="/menu"
 				class="link transition-all w-full justify-center flex items-center p-4 font-semibold rounded-full"
-				><Pizza class="icon transition-all scale-[0.7] w-6 h-6 mr-2" />
+				><Pizza class="icon transition-all scale-[0.7] w-6 h-6" />
 			</RouterLink>
 			<RouterLink
 				to="/account"
 				class="link transition-all w-full justify-center flex items-center p-4 font-semibold rounded-full"
-				><User class="icon transition-all scale-[0.7] w-6 h-6 mr-2" />
+				><User class="icon transition-all scale-[0.7] w-6 h-6" />
 			</RouterLink>
 			<RouterLink
 				to="/cart"
 				class="link transition-all w-full justify-center flex items-center p-4 font-semibold rounded-full"
-				><ShoppingCart class="icon transition-all scale-[0.7] w-6 h-6 mr-2" />
+				><ShoppingCart class="icon transition-all scale-[0.7] w-6 h-6" />
 			</RouterLink>
 		</div>
 	</div>
