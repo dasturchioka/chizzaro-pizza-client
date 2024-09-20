@@ -1,24 +1,21 @@
 <script setup lang="ts">
-import PepperoniImg from '@/assets/pepperoni-transparent.png'
-import MargaritaImg from '@/assets/margarita-transparent.png'
-import SirniyMiksImg from '@/assets/sirniy-miks-transparent.png'
-import ChizzaroImg from '@/assets/chizzaro-transparent.png'
-import { ref } from 'vue'
-
+import { onMounted, ref } from 'vue'
 import Item from '@/components/menu/item.vue'
+import { useItems } from '@/store/items'
+import { storeToRefs } from 'pinia'
 
+const itemsStore = useItems()
 const activeSection = ref('pizza')
 
-const pizzas = [
-	{ id: '1', name: 'Pepperoni', size: '36sm', price: '60,000', quantity: 0, image: PepperoniImg },
-	{ id: '2', name: 'Margarita', size: '36sm', price: '60,000', quantity: 0, image: MargaritaImg },
-	{ id: '3', name: 'Sirniy Miks', size: '36sm', price: '65,000', quantity: 0, image: SirniyMiksImg },
-	{ id: '4', name: 'Chizzaro Pizza', size: '36sm', price: '75,000', quantity: 0, image: ChizzaroImg },
-]
+const { items } = storeToRefs(itemsStore)
 
 const setActiveSection = async (section: string) => {
 	activeSection.value = section
 }
+
+onMounted(async () => {
+	await itemsStore.getAllItems()
+})
 </script>
 
 <template>
@@ -88,12 +85,12 @@ const setActiveSection = async (section: string) => {
 			</div>
 		</nav>
 		<section class="pb-8">
-			<div id="pizza" class="p-4">
-				<h2 class="text-2xl mb-4 font-bold">Pizza</h2>
+			<div v-for="(category, index) in items" :id="category.id" class="p-4">
+				<h2 class="text-2xl mb-4 font-bold">{{ category.name }}</h2>
 				<div class="scroll-container">
 					<div class="flex space-x-4">
-						<div v-for="pizza in pizzas">
-							<Item :pizza="pizza" />
+						<div v-for="i in category.items">
+							<Item :item="i" />
 						</div>
 					</div>
 				</div>

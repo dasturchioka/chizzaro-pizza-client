@@ -7,7 +7,8 @@ export interface Item {
 	size: string
 	price: string
 	quantity: number
-	image: string
+	img: string
+	category: string
 }
 
 export const useCart = defineStore('cart-store', () => {
@@ -21,7 +22,7 @@ export const useCart = defineStore('cart-store', () => {
 	async function increaseQuantity(id: string) {
 		const item = cart.value.find((i: any) => i.id === id)
 		if (item) {
-			item.quantity++;
+			item.quantity++
 		}
 	}
 

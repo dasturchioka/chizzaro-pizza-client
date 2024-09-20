@@ -2,12 +2,21 @@
 import { RouterView } from 'vue-router'
 import { Pizza, ShoppingCart, User } from 'lucide-vue-next'
 import { PageTransition, TransitionPresets } from 'vue3-page-transition'
+import { Toaster } from 'vue-sonner'
 </script>
 
 <template>
 	<div
-		class="h-screen max-h-screen overflow-y-scroll w-full bg-brand-light flex flex-col justify-between font-raleway"
+		class="h-screen max-h-screen overflow-y-scroll w-full bg-brand-light flex flex-col font-raleway"
 	>
+		<Toaster
+			position="top-center"
+			:toastOptions="{
+				style: { background: '#fff' },
+				class: 'my-toast',
+				descriptionClass: 'my-toast-description',
+			}"
+		/>
 		<router-view v-slot="{ Component }">
 			<PageTransition :name="TransitionPresets.fadeInUp" mode="out-in" appear>
 				<component :is="Component" />
