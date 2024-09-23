@@ -3,11 +3,14 @@ import { onMounted, ref } from 'vue'
 import Item from '@/components/menu/item.vue'
 import { useItems } from '@/store/items'
 import { storeToRefs } from 'pinia'
+import { useCategory } from '@/store/category'
 
 const itemsStore = useItems()
+const categoryStore = useCategory()
 const activeSection = ref('pizza')
 
 const { items } = storeToRefs(itemsStore)
+const { categories } = storeToRefs(categoryStore)
 
 const setActiveSection = async (section: string) => {
 	activeSection.value = section
@@ -15,6 +18,8 @@ const setActiveSection = async (section: string) => {
 
 onMounted(async () => {
 	await itemsStore.getAllItems()
+	await categoryStore.getCategories()
+	await setActiveSection('pizza')
 })
 </script>
 
@@ -23,69 +28,24 @@ onMounted(async () => {
 		<nav class="bg-brand-dark text-white p-4 flex justify-between items-center w-full sticky top-0">
 			<div class="flex space-x-4 max-h-full overflow-x-scroll scroll-container-no-pd">
 				<a
-					href="#pizza"
-					@click="setActiveSection('pizza')"
+					v-for="(category, index) in categories"
+					:key="index"
+					:href="`#${category.name.toLowerCase()}`"
+					@click="setActiveSection(category.name.toLowerCase())"
 					class="transition-all px-4 py-2 rounded-full font-semibold flex-shrink-0"
 					:class="[
-						activeSection === 'pizza'
+						activeSection === category.name.toLowerCase()
 							? 'bg-brand-third text-brand-dark'
 							: 'text-brand-third bg-brand-dark ',
 					]"
+					:hidden="!category.isOnTheBase"
 				>
-					Pizza
-				</a>
-				<a
-					href="#drink"
-					@click="setActiveSection('drink')"
-					class="transition-all px-4 py-2 rounded-full font-semibold flex-shrink-0"
-					:class="[
-						activeSection === 'drink'
-							? 'bg-brand-third text-brand-dark'
-							: 'text-brand-third bg-brand-dark ',
-					]"
-				>
-					Ichimlik
-				</a>
-				<a
-					href="#desert"
-					@click="setActiveSection('desert')"
-					class="transition-all px-4 py-2 font-semibold rounded-full flex-shrink-0"
-					:class="[
-						activeSection === 'desert'
-							? 'bg-brand-third text-brand-dark'
-							: 'text-brand-third bg-brand-dark ',
-					]"
-				>
-					Gazak
-				</a>
-				<a
-					href="#burger"
-					@click="setActiveSection('burger')"
-					class="transition-all px-4 py-2 font-semibold rounded-full flex-shrink-0"
-					:class="[
-						activeSection === 'burger'
-							? 'bg-brand-third text-brand-dark'
-							: 'text-brand-third bg-brand-dark ',
-					]"
-				>
-					Burgerlar
-				</a>
-				<a
-					href="#lavash"
-					@click="setActiveSection('lavash')"
-					class="transition-all px-4 py-2 font-semibold rounded-full flex-shrink-0"
-					:class="[
-						activeSection === 'lavash'
-							? 'bg-brand-third text-brand-dark'
-							: 'text-brand-third bg-brand-dark ',
-					]"
-				>
-					Lavashlar
+					{{ category.name }}
 				</a>
 			</div>
 		</nav>
 		<section class="pb-8">
-			<div v-for="(category, index) in items" :id="category.id" class="p-4">
+			<div v-for="(category, index) in items" :id="category.name" class="p-4">
 				<h2 class="text-2xl mb-4 font-bold">{{ category.name }}</h2>
 				<div class="scroll-container">
 					<div class="flex space-x-4">

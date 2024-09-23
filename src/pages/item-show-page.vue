@@ -7,7 +7,7 @@ import { useCart } from '@/store/cart'
 import { Button } from '@/components/ui/button'
 import { config } from '@/config'
 import Logo from '@/assets/logo.png'
-import { ShoppingCart } from 'lucide-vue-next'
+import { ArrowLeft, ShoppingCart } from 'lucide-vue-next'
 
 const cartStore = useCart()
 const itemsStore = useItems()
@@ -25,29 +25,30 @@ const isItemInCart = computed(() => {
 })
 
 const itemsQuantity = computed(() => {
-	return cart.value.find(itemInCart => itemInCart.id === route.params.id)?.quantity
+	const i = cart.value.find(itemInCart => itemInCart.id === route.params.id)
+
+	if (i) return i.quantity
 })
 
 const totalPriceOfItemInCart = computed(() => {
 	if (!item.value) return
 
-	const price = ref(0)
-	const priceOfItem = +item.value.price.replace(/,/g, '')
+	const priceFormatted = +item.value.price.replace(',', '')
 
-	const currencyFormatter = new Intl.NumberFormat('en-US', {
+	if (!itemsQuantity.value) return
+
+	const currencyFormatter = new Intl.NumberFormat('uz-UZ', {
 		style: 'currency',
 		currency: 'UZS',
+		compactDisplay: 'short',
+		minimumFractionDigits: 0,
 	})
 
-	cart.value.forEach(i => {
-		if (i.id === route.params.id) {
-			price.value += priceOfItem
-		}
-	})
+	const formattedCurrency = currencyFormatter
+		.format(priceFormatted * itemsQuantity.value)
+		.replace('UZS', '')
 
-	const formattedPrice = currencyFormatter.format(price.value)
-
-	return formattedPrice
+	return formattedCurrency
 })
 </script>
 
@@ -60,10 +61,7 @@ const totalPriceOfItemInCart = computed(() => {
 		</div>
 		<div class="item" v-else-if="item && !itemNotFound">
 			<div class="top bg-brand-dark flex justify-between items-center px-4 py-6">
-				<p class="category font-manrope opacity-50 text-lg text-white font-semibold">
-					{{ item.category.name }}
-				</p>
-
+				<Button variant="ghost" class="text-white" @click="$router.go(-1)"><ArrowLeft/></Button>
 				<img class="w-16" :src="Logo" alt="Chizzaro pizza logo" />
 			</div>
 			<div class="middle flex flex-col items-center">
@@ -94,7 +92,7 @@ const totalPriceOfItemInCart = computed(() => {
 					@click="cartStore.pushItemToCart(item)"
 					><ShoppingCart class="w-5 h-6 mr-2" /> Qo'shish</Button
 				>
-				<div class="flex items-center justify-between mt-2 w-full" v-show="isItemInCart">
+				<div class="flex items-center justify-between mt-6 w-full" v-show="isItemInCart">
 					<Button @click="cartStore.decreaseQuantity(item.id)" class="text-white bg-brand-dark">
 						-
 					</Button>
@@ -103,9 +101,9 @@ const totalPriceOfItemInCart = computed(() => {
 						+
 					</Button>
 				</div>
-				<span v-show="isItemInCart" class="calculator"
-					>Jami: <b>{{ totalPriceOfItemInCart }} so'm</b></span
-				>
+				<p v-show="isItemInCart" class="calculator font-raleway text-brand-dark mt-6 text-center">
+					Jami: <b>{{ totalPriceOfItemInCart }} so'm</b>
+				</p>
 			</div>
 		</div>
 	</div>

@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { Item, useCart } from '@/store/cart.ts'
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
+import { computed, toRefs } from 'vue'
 import Button from '../ui/button/Button.vue'
 import { config } from '@/config'
 import { RouterLink } from 'vue-router'
 
-const props = defineProps<{ item: Item }>()
+const props = defineProps<{ item: Item; showTotalPrice?: boolean }>()
 
 const cartStore = useCart()
 
 const { cart } = storeToRefs(cartStore)
+
+const { item, showTotalPrice } = toRefs(props)
 
 const isItemAvailableInCart = computed(() => {
 	return cart.value.some(item => item.id === props.item.id)
@@ -18,6 +20,27 @@ const isItemAvailableInCart = computed(() => {
 
 const itemsQuantity = computed(() => {
 	return cart.value.find(item => item.id === props.item.id)?.quantity
+})
+
+const totalPriceOfItemInCart = computed(() => {
+	if (!item) return
+
+	const priceFormatted = +item.value.price.replace(',', '')
+
+	if (!itemsQuantity.value) return
+
+	const currencyFormatter = new Intl.NumberFormat('uz-UZ', {
+		style: 'currency',
+		currency: 'UZS',
+		compactDisplay: 'short',
+		minimumFractionDigits: 0,
+	})
+
+	const formattedCurrency = currencyFormatter
+		.format(priceFormatted * itemsQuantity.value)
+		.replace('UZS', '')
+
+	return formattedCurrency
 })
 </script>
 
@@ -46,9 +69,12 @@ const itemsQuantity = computed(() => {
 				class="w-full font-bold rounded-lg py-4"
 				>Qo'shish</Button
 			>
-			<Button variant="ghost" class="w-full mt-2">
+			<Button variant="ghost" class="w-full mt-2 font-bold">
 				<RouterLink class="w-full" :to="`/item/${item.id}`">Ko'rish</RouterLink>
 			</Button>
+			<p v-show="showTotalPrice" class="calculator font-raleway text-brand-dark mt-2 text-center">
+				<b>x{{ item.quantity }} {{ totalPriceOfItemInCart }} so'm</b>
+			</p>
 		</div>
 	</div>
 </template>
