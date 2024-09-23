@@ -45,7 +45,7 @@ onMounted(async () => {
 			</div>
 		</nav>
 		<section class="pb-8">
-			<div v-for="(category, index) in items" :id="category.name" class="p-4">
+			<div v-for="(category, index) in items" :id="category.name.toLowerCase()" class="p-4">
 				<h2 class="text-2xl mb-4 font-bold">{{ category.name }}</h2>
 				<div class="scroll-container">
 					<div class="flex space-x-4">
