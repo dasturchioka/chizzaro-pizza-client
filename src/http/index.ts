@@ -37,6 +37,11 @@ export const categoryInstance = axios.create({
 	baseURL: config.SERVER_API_URL + '/category',
 })
 
+export const orderInstance =axios.create({
+	baseURL: config.SERVER_API_URL + '/order',
+})
+
 // Apply interceptors to all instances
 setInterceptors(itemsInstance)
 setInterceptors(categoryInstance)
+setInterceptors(orderInstance)
