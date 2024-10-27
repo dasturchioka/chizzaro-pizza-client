@@ -7,20 +7,19 @@ import {Category} from "@/models"
 export const useCategory = defineStore('category-store', () => {
 	const id = ref('category-store')
 	const categories = ref<Category[]>()
-	
+
 	async function getCategories() {
 		try {
 			const response = await categoryInstance.get('/get-category-types')
-			
+
 			if (!response) {
 				toast('Internet yoki server bilan aloqa mavjud emas')
 				return
 			}
-			
+
 			const data = await response.data
-			
+
 			categories.value = data.categories
-			console.log(categories.value)
 		} catch (error: any) {
 			console.log(error)
 			toast(
@@ -30,7 +29,7 @@ export const useCategory = defineStore('category-store', () => {
 			)
 		}
 	}
-	
+
 	return {
 		getCategories,
 		categories,

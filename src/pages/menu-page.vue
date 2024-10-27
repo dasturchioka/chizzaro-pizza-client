@@ -25,7 +25,9 @@ onMounted(async () => {
 
 <template>
 	<div class="menu-page">
-		<nav class="bg-brand-dark text-white p-4 flex justify-between items-center w-full sticky top-0">
+		<nav
+			class="bg-brand-dark text-white px-4 py-2 flex justify-between items-center w-full sticky top-0"
+		>
 			<div class="flex space-x-4 max-h-full overflow-x-scroll scroll-container-no-pd">
 				<a
 					v-for="(category, index) in categories"

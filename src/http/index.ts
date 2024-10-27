@@ -4,13 +4,14 @@ import { config } from '@/config'
 
 // Function to set interceptors
 const setInterceptors = (instance: AxiosInstance) => {
-	const loadingStore = useLoading()
 	instance.interceptors.request.use(
 		async config => {
+			const loadingStore = useLoading()
 			await loadingStore.setLoading(true)
 			return config
 		},
 		async error => {
+			const loadingStore = useLoading()
 			await loadingStore.setLoading(false)
 			return Promise.reject(error)
 		}
@@ -18,10 +19,12 @@ const setInterceptors = (instance: AxiosInstance) => {
 
 	instance.interceptors.response.use(
 		async response => {
+			const loadingStore = useLoading()
 			await loadingStore.setLoading(true)
 			return response
 		},
 		async error => {
+			const loadingStore = useLoading()
 			await loadingStore.setLoading(false)
 			return Promise.reject(error)
 		}
@@ -37,11 +40,16 @@ export const categoryInstance = axios.create({
 	baseURL: config.SERVER_API_URL + '/category',
 })
 
-export const orderInstance =axios.create({
+export const orderInstance = axios.create({
 	baseURL: config.SERVER_API_URL + '/order',
+})
+
+export const authInstance = axios.create({
+	baseURL: config.SERVER_API_URL + '/auth',
 })
 
 // Apply interceptors to all instances
 setInterceptors(itemsInstance)
 setInterceptors(categoryInstance)
 setInterceptors(orderInstance)
+setInterceptors(authInstance)
