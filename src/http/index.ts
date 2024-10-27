@@ -20,7 +20,7 @@ const setInterceptors = (instance: AxiosInstance) => {
 	instance.interceptors.response.use(
 		async response => {
 			const loadingStore = useLoading()
-			await loadingStore.setLoading(true)
+			await loadingStore.setLoading(false)
 			return response
 		},
 		async error => {
