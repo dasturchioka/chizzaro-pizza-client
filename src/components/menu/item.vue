@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { Item, useCart } from '@/store/cart.ts'
+import { useCart } from '@/store/cart.ts'
 import { storeToRefs } from 'pinia'
 import { computed, toRefs } from 'vue'
 import Button from '../ui/button/Button.vue'
 import { config } from '@/config'
 import { RouterLink } from 'vue-router'
+import { Item } from '@/models'
 
 const props = defineProps<{ item: Item; showTotalPrice?: boolean }>()
 
