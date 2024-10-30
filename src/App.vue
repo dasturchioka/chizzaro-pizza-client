@@ -10,8 +10,6 @@ import { onMounted } from 'vue'
 import { useProfile } from './store/profile'
 import GlobalLoading from './components/ui/loading/GlobalLoading.vue'
 import { useLoading } from './store/loading'
-import SelectLocation from './components/locations/select-location.vue'
-import Button from './components/ui/button/Button.vue'
 
 const loadingStore = useLoading()
 const profileStore = useProfile()
