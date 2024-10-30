@@ -5,19 +5,31 @@ import { PageTransition, TransitionPresets } from 'vue3-page-transition'
 import { Toaster } from 'vue-sonner'
 import { useTelegramId } from '@/composables/useTelegramId'
 import LoginModal from './components/auth/login-modal.vue'
-import { useAuth } from './store/auth'
 import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
+import { useProfile } from './store/profile'
+import GlobalLoading from './components/ui/loading/GlobalLoading.vue'
+import { useLoading } from './store/loading'
+import SelectLocation from './components/locations/select-location.vue'
+import Button from './components/ui/button/Button.vue'
 
-const authStore = useAuth()
+const loadingStore = useLoading()
+const profileStore = useProfile()
 const { userIdOnTelegram } = useTelegramId()
 
-const { isLoggedIn } = storeToRefs(authStore)
+const { globalLoading } = storeToRefs(loadingStore)
+const { isLoggedIn } = storeToRefs(profileStore)
+
+onMounted(async () => {
+	await profileStore.checkLoggedIn()
+})
 </script>
 
 <template>
 	<div
 		class="h-screen max-h-screen overflow-y-scroll w-full bg-brand-light flex flex-col font-raleway"
 	>
+		<GlobalLoading />
 		<Toaster
 			position="top-center"
 			:toastOptions="{
@@ -26,12 +38,9 @@ const { isLoggedIn } = storeToRefs(authStore)
 				descriptionClass: 'my-toast-description',
 			}"
 		/>
-		<nav class="top-nav">
-			<div class="select-location"></div>
-		</nav>
 		<router-view v-slot="{ Component }">
 			<PageTransition :name="TransitionPresets.fadeInUp" mode="out-in" appear>
-				<component :is="Component" />
+				<component v-show="!globalLoading" :is="Component" />
 			</PageTransition>
 		</router-view>
 		<div

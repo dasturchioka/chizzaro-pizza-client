@@ -1,26 +1,17 @@
 import { authInstance } from '@/http'
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { useWebAppCloudStorage } from 'vue-tg'
 import { useTelegramId } from '@/composables/useTelegramId'
+import { useProfile } from './profile'
 
 export const useAuth = defineStore('auth-store', () => {
 	const cloudStorage = useWebAppCloudStorage()
+	const profileStore = useProfile()
 	const { userIdOnTelegram } = useTelegramId()
-	const profile = ref()
 
-	const isLoggedIn = ref(false)
-
-	async function checkLoggedIn() {
-		const token = await cloudStorage.getStorageItem('token')
-
-		if (!token || !token.includes('ey')) {
-			isLoggedIn.value = false
-		} else {
-			isLoggedIn.value = true
-		}
-	}
+	const { isLoggedIn, profile } = storeToRefs(profileStore)
 
 	async function login(payload: { phone: string }) {
 		try {
@@ -73,8 +64,17 @@ export const useAuth = defineStore('auth-store', () => {
 			}
 
 			await cloudStorage.setStorageItem('token', data.token)
+			await cloudStorage.setStorageItem('id', data.id)
 			isLoggedIn.value = true
 			profile.value = data.profile
+
+			const token = await cloudStorage.getStorageItem('token')
+			const id = await cloudStorage.getStorageItem('id')
+
+			console.log(token)
+			console.log(id)
+
+			toast(data.msg)
 
 			return { status: 'ok' }
 		} catch (error: any) {
@@ -87,5 +87,5 @@ export const useAuth = defineStore('auth-store', () => {
 		}
 	}
 
-	return { login, isLoggedIn, checkLoggedIn, confirmLogin }
+	return { login, confirmLogin }
 })

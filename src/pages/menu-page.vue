@@ -4,11 +4,16 @@ import Item from '@/components/menu/item.vue'
 import { useItems } from '@/store/items'
 import { storeToRefs } from 'pinia'
 import { useCategory } from '@/store/category'
+import SelectLocation from '@/components/locations/select-location.vue'
+import Button from '@/components/ui/button/Button.vue'
+import { useLocations } from '@/store/locations'
 
+const locationStore = useLocations()
 const itemsStore = useItems()
 const categoryStore = useCategory()
 const activeSection = ref('pizza')
 
+const { selectedLocation } = storeToRefs(locationStore)
 const { items } = storeToRefs(itemsStore)
 const { categories } = storeToRefs(categoryStore)
 
@@ -25,6 +30,18 @@ onMounted(async () => {
 
 <template>
 	<div class="menu-page">
+		<div class="select-location p-2 w-full flex justify-center items-center">
+			<SelectLocation>
+				<template #trigger>
+					<Button
+						variant="outline"
+						class="w-[80%] bg-brand-third text-brand-dark border-brand-dark hover:bg-brand-third"
+					>
+						{{ selectedLocation ? selectedLocation.displayName : 'Manzilni tanlash' }}
+					</Button>
+				</template>
+			</SelectLocation>
+		</div>
 		<nav
 			class="bg-brand-dark text-white px-4 py-2 flex justify-between items-center w-full sticky top-0"
 		>

@@ -5,6 +5,7 @@ import router from './router'
 import PageTransition from 'vue3-page-transition'
 import { createPinia } from 'pinia'
 import { VueTelegramPlugin } from 'vue-tg'
+import 'leaflet/dist/leaflet.css'
 
 createApp(App)
 	.use(router)

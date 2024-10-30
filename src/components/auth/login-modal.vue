@@ -34,6 +34,8 @@ const buttonDisabled = computed(() => {
 	return userDetails.value.phone.length !== 12
 })
 
+const drawerCloseButton = ref<HTMLButtonElement | null>(null)
+
 const isDisabledPinInput = ref(false)
 const isConfirming = ref(false)
 
@@ -47,6 +49,8 @@ const login = async () => {
 }
 
 const confirmLogin = async () => {
+	isDisabledPinInput.value = true
+
 	const result = await authStore.confirmLogin({
 		phone: userDetails.value.phone,
 		code: userDetails.value.code.join(''),
@@ -54,10 +58,18 @@ const confirmLogin = async () => {
 
 	if (result && result.status === 'bad') {
 		isDisabledPinInput.value = false
+		userDetails.value.code = ['']
 		return
 	}
 
-	isDisabledPinInput.value = false
+	if (result && result.status === 'ok') {
+		isDisabledPinInput.value = false
+		drawerCloseButton.value?.click()
+	}
+}
+
+const changePhoneNumber = () => {
+	isConfirming.value = false
 }
 </script>
 
@@ -68,8 +80,8 @@ const confirmLogin = async () => {
 		</DrawerTrigger>
 		<DrawerContent class="px-4">
 			<div v-if="!isConfirming" class="">
-				<DrawerClose class="absolute top-4 right-4">
-					<Button variant="ghost"> <XIcon /> </Button>
+				<DrawerClose as-child class="absolute top-4 right-4">
+					<Button ref="drawerCloseButton" variant="ghost"> <XIcon /> </Button>
 				</DrawerClose>
 				<DrawerHeader class="text-left px-0">
 					<DrawerTitle>Akkauntga kirish</DrawerTitle>
@@ -115,7 +127,11 @@ const confirmLogin = async () => {
 						</PinInput>
 					</div>
 				</div>
-				<DrawerFooter class="px-0"> </DrawerFooter>
+				<DrawerFooter class="px-0">
+					<Button @click="changePhoneNumber" variant="ghost" class="py-6">
+						Raqamni o'zgartirish
+					</Button>
+				</DrawerFooter>
 			</div>
 		</DrawerContent>
 	</Drawer>
