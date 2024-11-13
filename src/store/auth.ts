@@ -1,16 +1,18 @@
-import { authInstance } from '@/http'
+import { authInstance, profileInstance, setTokenInHeaders } from '@/http'
 import { defineStore, storeToRefs } from 'pinia'
-import { ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { useWebAppCloudStorage } from 'vue-tg'
 import { useTelegramId } from '@/composables/useTelegramId'
 import { useProfile } from './profile'
+import { useSocket } from './socket'
 
 export const useAuth = defineStore('auth-store', () => {
 	const cloudStorage = useWebAppCloudStorage()
 	const profileStore = useProfile()
+	const socketStore = useSocket()
 	const { userIdOnTelegram } = useTelegramId()
 
+	const { state } = storeToRefs(socketStore)
 	const { isLoggedIn, profile } = storeToRefs(profileStore)
 
 	async function login(payload: { phone: string }) {
@@ -65,14 +67,14 @@ export const useAuth = defineStore('auth-store', () => {
 
 			await cloudStorage.setStorageItem('token', data.token)
 			await cloudStorage.setStorageItem('id', data.id)
+
+			await setTokenInHeaders(profileInstance)
+
 			isLoggedIn.value = true
 			profile.value = data.profile
 
-			const token = await cloudStorage.getStorageItem('token')
-			const id = await cloudStorage.getStorageItem('id')
-
-			console.log(token)
-			console.log(id)
+			await profileStore.checkLoggedIn()
+			await socketStore.initConnection(state.value.socketId)
 
 			toast(data.msg)
 

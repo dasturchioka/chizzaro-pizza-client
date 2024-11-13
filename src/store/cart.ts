@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { Item } from '@/models'
 
 export const useCart = defineStore('cart-store', () => {
@@ -27,5 +27,35 @@ export const useCart = defineStore('cart-store', () => {
 		}
 	}
 
-	return { cart, pushItemToCart, increaseQuantity, decreaseQuantity, id }
+	const itemsQuantity = computed(() => {
+		return cart.value.reduce((total, item) => total + item.quantity, 0)
+	})
+
+	const totalPriceOfCart = computed(() => {
+		const currencyFormatter = new Intl.NumberFormat('uz-UZ', {
+			style: 'currency',
+			currency: 'UZS',
+			compactDisplay: 'short',
+			minimumFractionDigits: 0,
+		})
+
+		const totalPrice = cart.value.reduce(
+			(acc, item) => acc + +item.price.replace(',', '') * item.quantity,
+			0
+		)
+
+		const formattedCurrency = currencyFormatter.format(totalPrice).replace('UZS', '')
+
+		return formattedCurrency
+	})
+
+	return {
+		cart,
+		pushItemToCart,
+		increaseQuantity,
+		decreaseQuantity,
+		itemsQuantity,
+		id,
+		totalPriceOfCart,
+	}
 })

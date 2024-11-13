@@ -49,7 +49,7 @@ const totalPriceOfItemInCart = computed(() => {
 	<div
 		class="w-[220px] h-auto bg-brand-third p-4 rounded-xl border-4 border-brand-dark flex flex-col items-center shadow-lg flex-shrink-0"
 	>
-		<img :src="config.SERVER_BASE_URL + `/` + item.img" alt="pizza image" class="w-32 h-32 mb-2" />
+		<img :src="config.SERVER_BASE_URL + `/` + item.img" alt="pizza image" class="w-32 h-32 mb-2 object-contain" />
 		<div class="text text-left self-start my-2">
 			<h3 class="text-xl font-extrabold">{{ item.name }}</h3>
 			<p class="text-3xl font-bold text-[#931714]">{{ item.price }}</p>
@@ -74,7 +74,7 @@ const totalPriceOfItemInCart = computed(() => {
 				<RouterLink class="w-full" :to="`/item/${item.id}`">Ko'rish</RouterLink>
 			</Button>
 			<p v-show="showTotalPrice" class="calculator font-raleway text-brand-dark mt-2 text-center">
-				<b>x{{ item.quantity }} {{ totalPriceOfItemInCart }} so'm</b>
+				<b>x{{ item.quantity }} {{ totalPriceOfItemInCart }}</b>
 			</p>
 		</div>
 	</div>

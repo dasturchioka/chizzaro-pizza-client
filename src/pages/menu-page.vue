@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import Item from '@/components/menu/item.vue'
 import { useItems } from '@/store/items'
 import { storeToRefs } from 'pinia'
 import { useCategory } from '@/store/category'
+import Button from '@/components/ui/button/Button.vue'
+import { useCart } from '@/store/cart'
+import { PageTransition, TransitionPresets } from 'vue3-page-transition'
+import { ShoppingCart } from 'lucide-vue-next'
 
+const cartStore = useCart()
 const itemsStore = useItems()
 const categoryStore = useCategory()
 const activeSection = ref('pizza')
 
+const { cart, itemsQuantity } = storeToRefs(cartStore)
 const { items } = storeToRefs(itemsStore)
 const { categories } = storeToRefs(categoryStore)
 
@@ -20,6 +26,16 @@ onMounted(async () => {
 	await itemsStore.getAllItems()
 	await categoryStore.getCategories()
 	await setActiveSection('pizza')
+})
+
+const isItemInCart = computed(() => {
+	if (cart.value && cart.value.length) return true
+
+	return false
+})
+
+const itemsLengthInCart = computed(() => {
+	return cart.value.length
 })
 </script>
 
@@ -47,10 +63,15 @@ onMounted(async () => {
 			</div>
 		</nav>
 		<section class="pb-8">
-			<div v-for="(category, index) in items" :id="category.name.toLowerCase()" class="p-4">
+			<div
+				v-for="(category, index) in items"
+				:id="category.name.toLowerCase()"
+				class="p-4"
+				:key="index"
+			>
 				<h2 class="text-2xl mb-4 font-bold">{{ category.name }}</h2>
 				<div class="scroll-container">
-					<div class="flex space-x-4">
+					<div class="flex space-x-2">
 						<div v-for="i in category.items">
 							<Item :item="i" />
 						</div>
@@ -58,6 +79,15 @@ onMounted(async () => {
 				</div>
 			</div>
 		</section>
+		<PageTransition :name="TransitionPresets.fadeInUp" mode="out-in" appear>
+			<Button
+				v-show="isItemInCart"
+				@click="$router.push('/cart')"
+				class="transition-all fixed right-4 bottom-16 mb-4"
+			>
+				<ShoppingCart class="size-4 mr-2" /> Savatga o'tish ({{ itemsQuantity }})
+			</Button>
+		</PageTransition>
 	</div>
 </template>
 

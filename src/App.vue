@@ -10,7 +10,9 @@ import { onMounted } from 'vue'
 import { useProfile } from './store/profile'
 import GlobalLoading from './components/ui/loading/GlobalLoading.vue'
 import { useLoading } from './store/loading'
+import { useSocket } from './store/socket'
 
+const socketStore = useSocket()
 const loadingStore = useLoading()
 const profileStore = useProfile()
 const { userIdOnTelegram } = useTelegramId()
@@ -20,6 +22,7 @@ const { isLoggedIn } = storeToRefs(profileStore)
 
 onMounted(async () => {
 	await profileStore.checkLoggedIn()
+	await socketStore.connectSocket()
 })
 </script>
 
@@ -68,7 +71,8 @@ onMounted(async () => {
 			<RouterLink
 				to="/cart"
 				class="link transition-all w-full justify-center flex items-center p-4 font-semibold rounded-full"
-				><ShoppingCart class="icon transition-all scale-[0.7] w-6 h-6" />
+			>
+				<ShoppingCart class="icon transition-all scale-[0.7] w-6 h-6" />
 			</RouterLink>
 		</div>
 	</div>

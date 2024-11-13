@@ -10,8 +10,7 @@ export const buttonVariants = cva(
 				default: 'text-white bg-brand-dark shadow font-manrope',
 				destructive:
 					'bg-red-500 text-zinc-50 shadow-sm hover:bg-red-500/90 dark:bg-red-900 dark:text-zinc-50 dark:hover:bg-red-900/90 font-manrope',
-				outline:
-					'border border-zinc-200 bg-white shadow-sm hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 font-manrope',
+				outline: 'border-2 border-brand-dark bg-transparent shadow-sm font-manrope',
 				secondary:
 					'bg-zinc-100 text-zinc-900 shadow-sm hover:bg-zinc-100/80 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-800/80 font-manrope',
 				ghost: 'font-manrope text-brand-dark',

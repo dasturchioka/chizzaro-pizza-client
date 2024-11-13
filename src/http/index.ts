@@ -35,7 +35,7 @@ const setInterceptors = (instance: AxiosInstance) => {
 }
 
 // Function to set token in headers
-const setTokenInHeaders = async (instance: AxiosInstance) => {
+export const setTokenInHeaders = async (instance: AxiosInstance) => {
 	const token = await cloudStorage.getStorageItem('token')
 	instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
 }

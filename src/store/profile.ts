@@ -4,12 +4,26 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { useWebAppCloudStorage } from 'vue-tg'
+import { Client } from '@/models'
+import { useTelegramId } from '@/composables/useTelegramId'
+import router from '@/router'
 
 export const useProfile = defineStore('profile-store', () => {
 	const loadingStore = useLoading()
 	const cloudStorage = useWebAppCloudStorage()
 
-	const profile = ref()
+	const { userIdOnTelegram } = useTelegramId()
+
+	const profile = ref<Client>({
+		fullname: '',
+		phone: '',
+		id: '',
+		locations: {} as any,
+		orders: {} as any,
+		status: 'OFFLINE',
+		telegramId: '',
+		confirmation: {},
+	})
 	const isLoggedIn = ref(false)
 	async function checkLoggedIn() {
 		try {
@@ -39,7 +53,7 @@ export const useProfile = defineStore('profile-store', () => {
 				if (data.status === 'bad') {
 					await cloudStorage.removeStorageItems(['token', 'id'])
 					isLoggedIn.value = false
-					profile.value = {}
+					profile.value = {} as Client
 					await loadingStore.setGlobalLoading(false)
 					toast("Ro'yxatdan o'tilmagan: ", data.msg)
 					return
@@ -59,5 +73,19 @@ export const useProfile = defineStore('profile-store', () => {
 		}
 	}
 
-	return { profile, isLoggedIn, checkLoggedIn }
+	async function logOut() {
+		try {
+			await loadingStore.setGlobalLoading(true)
+			await cloudStorage.removeStorageItems(['token', 'id'])
+			await router.push(`/menu/${userIdOnTelegram.value}`)
+			await cloudStorage.removeStorageItem('telegramId')
+			await checkLoggedIn()
+			await loadingStore.setGlobalLoading(false)
+		} catch (error: any) {
+			await loadingStore.setGlobalLoading(false)
+			toast(error.message || error)
+		}
+	}
+
+	return { profile, isLoggedIn, checkLoggedIn, logOut }
 })
